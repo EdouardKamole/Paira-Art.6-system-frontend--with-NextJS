@@ -94,9 +94,9 @@ export default function ContactPage() {
       label: 'LinkedIn' 
     },
     { 
-      icon: Twitter, 
+      icon: 'x', 
       href: 'https://x.com/peter_paira?s=11', 
-      label: 'X (Twitter)' 
+      label: 'X' 
     },
     { 
       icon: Youtube, 
