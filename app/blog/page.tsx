@@ -29,7 +29,7 @@ export default async function BlogPage() {
       _id: '2',
       slug: 'why-i-love-35mm-lens',
       title: 'Why I Love the 35mm Lens',
-      excerpt: 'The 35mm lens has become my signature. Here's why it's perfect for fashion and lifestyle photography.',
+      excerpt: "The 35mm lens has become my signature. Here's why it's perfect for fashion and lifestyle photography.",
       mainImage: 'https://images.unsplash.com/photo-1606166419283-d00f1aa47c8c?w=800&q=80',
       publishedAt: '2024-01-10',
       author: { name: 'Paira Art.6' },
