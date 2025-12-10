@@ -1,7 +1,3 @@
-// FILE: app/contact/page.tsx
-// Create folder: app/contact/
-// Create file: app/contact/page.tsx
-
 'use client';
 
 import { useState } from 'react';
@@ -10,9 +6,12 @@ import { Mail, Phone, MapPin, Instagram, Facebook, Linkedin, Send } from 'lucide
 export default function ContactPage() {
   const [formData, setFormData] = useState({
     name: '',
-    email: '',
-    phone: '',
-    subject: '',
+    contactMethod: '',
+    contactInfo: '',
+    photoshootType: '',
+    location: '',
+    needServices: '',
+    budget: '',
     message: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -28,7 +27,16 @@ export default function ContactPage() {
 
     setIsSubmitting(false);
     setSubmitted(true);
-    setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+    setFormData({ 
+      name: '', 
+      contactMethod: '', 
+      contactInfo: '', 
+      photoshootType: '', 
+      location: '', 
+      needServices: '', 
+      budget: '', 
+      message: '' 
+    });
 
     // Reset success message after 5 seconds
     setTimeout(() => setSubmitted(false), 5000);
@@ -101,11 +109,11 @@ export default function ContactPage() {
             {/* Contact Info */}
             <div className="lg:col-span-2">
               <div className="mb-12">
-                <p className="luxury-text mb-4">Contact Information</p>
+                <p className="luxury-text mb-4">Inquiries</p>
                 <h2 className="section-title mb-8">Let's Talk</h2>
                 <p className="text-charcoal-600 leading-relaxed text-lg mb-8">
-                  Whether you're looking for portraits, commercial work, editorial photography, 
-                  or cinematography, I'd love to hear about your project.
+                  I respond within an hour to my emails but even quicker on Whatsapp, 
+                  if that's your preferred method please let me know!
                 </p>
               </div>
 
@@ -169,83 +177,139 @@ export default function ContactPage() {
                   </div>
                 )}
 
-                {/* Name & Email */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label htmlFor="name" className="luxury-text block mb-2">
-                      Your Name *
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-6 py-4 border border-charcoal-200 rounded-lg focus:outline-none focus:border-pumpkin-500 transition-colors duration-300"
-                      placeholder="John Doe"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="email" className="luxury-text block mb-2">
-                      Email Address *
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-6 py-4 border border-charcoal-200 rounded-lg focus:outline-none focus:border-pumpkin-500 transition-colors duration-300"
-                      placeholder="john@example.com"
-                    />
-                  </div>
+                {/* Your Name */}
+                <div>
+                  <label htmlFor="name" className="luxury-text block mb-2">
+                    YOUR NAME *
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-6 py-4 border border-charcoal-200 rounded-lg focus:outline-none focus:border-pumpkin-500 transition-colors duration-300"
+                    placeholder="Your name"
+                  />
                 </div>
 
-                {/* Phone & Subject */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label htmlFor="phone" className="luxury-text block mb-2">
-                      Phone Number
-                    </label>
-                    <input
-                      type="tel"
-                      id="phone"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      className="w-full px-6 py-4 border border-charcoal-200 rounded-lg focus:outline-none focus:border-pumpkin-500 transition-colors duration-300"
-                      placeholder="+256 700 000 000"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="subject" className="luxury-text block mb-2">
-                      Subject *
-                    </label>
-                    <select
-                      id="subject"
-                      name="subject"
-                      value={formData.subject}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-6 py-4 border border-charcoal-200 rounded-lg focus:outline-none focus:border-pumpkin-500 transition-colors duration-300 bg-white"
-                    >
-                      <option value="">Select a service</option>
-                      <option value="portraits">Portrait Photography</option>
-                      <option value="commercial">Commercial Photography</option>
-                      <option value="editorial">Editorial Photography</option>
-                      <option value="runway">Runway Photography</option>
-                      <option value="film">Film & Cinematography</option>
-                      <option value="other">Other</option>
-                    </select>
-                  </div>
+                {/* Preferred Method of Contact */}
+                <div>
+                  <label htmlFor="contactMethod" className="luxury-text block mb-2">
+                    PREFERRED METHOD OF CONTACT *
+                  </label>
+                  <select
+                    id="contactMethod"
+                    name="contactMethod"
+                    value={formData.contactMethod}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-6 py-4 border border-charcoal-200 rounded-lg focus:outline-none focus:border-pumpkin-500 transition-colors duration-300 bg-white"
+                  >
+                    <option value="">Select method</option>
+                    <option value="email">Email</option>
+                    <option value="call">Call</option>
+                    <option value="text">Text</option>
+                    <option value="whatsapp">Whatsapp</option>
+                  </select>
+                </div>
+
+                {/* Contact Info */}
+                <div>
+                  <label htmlFor="contactInfo" className="luxury-text block mb-2">
+                    CONTACT INFO *
+                  </label>
+                  <input
+                    type="text"
+                    id="contactInfo"
+                    name="contactInfo"
+                    value={formData.contactInfo}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-6 py-4 border border-charcoal-200 rounded-lg focus:outline-none focus:border-pumpkin-500 transition-colors duration-300"
+                    placeholder="Email, phone number or WhatsApp"
+                  />
+                </div>
+
+                {/* Type of Photoshoot */}
+                <div>
+                  <label htmlFor="photoshootType" className="luxury-text block mb-2">
+                    WHAT TYPE OF PHOTOSHOOT ARE YOU LOOKING FOR? *
+                  </label>
+                  <select
+                    id="photoshootType"
+                    name="photoshootType"
+                    value={formData.photoshootType}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-6 py-4 border border-charcoal-200 rounded-lg focus:outline-none focus:border-pumpkin-500 transition-colors duration-300 bg-white"
+                  >
+                    <option value="">Select type</option>
+                    <option value="fashion">Fashion</option>
+                    <option value="commercial">Commercial</option>
+                    <option value="portrait">Portrait / Portfolio</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+
+                {/* Location */}
+                <div>
+                  <label htmlFor="location" className="luxury-text block mb-2">
+                    YOUR LOCATION *
+                  </label>
+                  <input
+                    type="text"
+                    id="location"
+                    name="location"
+                    value={formData.location}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-6 py-4 border border-charcoal-200 rounded-lg focus:outline-none focus:border-pumpkin-500 transition-colors duration-300"
+                    placeholder="City, Country"
+                  />
+                </div>
+
+                {/* Need Services */}
+                <div>
+                  <label htmlFor="needServices" className="luxury-text block mb-2">
+                    WILL YOU NEED A STYLIST, LOCATION SCOUT OR MOOD BOARD? *
+                  </label>
+                  <select
+                    id="needServices"
+                    name="needServices"
+                    value={formData.needServices}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-6 py-4 border border-charcoal-200 rounded-lg focus:outline-none focus:border-pumpkin-500 transition-colors duration-300 bg-white"
+                  >
+                    <option value="">Select option</option>
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                  </select>
+                </div>
+
+                {/* Budget */}
+                <div>
+                  <label htmlFor="budget" className="luxury-text block mb-2">
+                    WHAT IS YOUR OVERALL BUDGET FOR THE SHOOT? *
+                  </label>
+                  <input
+                    type="text"
+                    id="budget"
+                    name="budget"
+                    value={formData.budget}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-6 py-4 border border-charcoal-200 rounded-lg focus:outline-none focus:border-pumpkin-500 transition-colors duration-300"
+                    placeholder="Your budget"
+                  />
                 </div>
 
                 {/* Message */}
                 <div>
                   <label htmlFor="message" className="luxury-text block mb-2">
-                    Your Message *
+                    PLEASE DESCRIBE IN DETAIL WHAT YOU ARE LOOKING FOR *
                   </label>
                   <textarea
                     id="message"
@@ -255,7 +319,7 @@ export default function ContactPage() {
                     required
                     rows={6}
                     className="w-full px-6 py-4 border border-charcoal-200 rounded-lg focus:outline-none focus:border-pumpkin-500 transition-colors duration-300 resize-none"
-                    placeholder="Tell me about your project..."
+                    placeholder="Tell me about your project in detail..."
                   />
                 </div>
 
@@ -272,7 +336,7 @@ export default function ContactPage() {
                     </>
                   ) : (
                     <>
-                      Send Message
+                      SEND MESSAGE
                       <Send className="w-4 h-4" />
                     </>
                   )}
@@ -284,7 +348,7 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* Map Section (Optional) */}
+      {/* Map Section */}
       <section className="h-96 bg-charcoal-100">
         <iframe
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d255282.35854633103!2d32.452502!3d0.347596!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x177dbb6c4c6c7b3f%3A0x5eb6b8e8f3b4d6c4!2sKampala%2C%20Uganda!5e0!3m2!1sen!2s!4v1234567890"
