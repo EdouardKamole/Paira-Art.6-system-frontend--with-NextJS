@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { Mail, Phone, MapPin, Instagram, Facebook, Linkedin, Send } from 'lucide-react';
+import { Mail, Phone, MapPin, Instagram, Facebook, Linkedin, Send, Youtube, Twitter } from 'lucide-react';
+import { SiTiktok } from 'react-icons/si';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -58,9 +59,15 @@ export default function ContactPage() {
     },
     {
       icon: Phone,
+      label: 'WhatsApp & Phone',
+      value: '+256 756 143 976',
+      href: 'https://wa.me/256756143976',
+    },
+    {
+      icon: Phone,
       label: 'Phone',
-      value: '+256 700 000 000',
-      href: 'tel:+256700000000',
+      value: '+256 764 103 776',
+      href: 'tel:+256764103776',
     },
     {
       icon: MapPin,
@@ -71,9 +78,36 @@ export default function ContactPage() {
   ];
 
   const socialLinks = [
-    { icon: Instagram, href: 'https://instagram.com/pairaart6', label: 'Instagram' },
-    { icon: Facebook, href: 'https://facebook.com/pairaart6', label: 'Facebook' },
-    { icon: Linkedin, href: 'https://linkedin.com/in/pairaart6', label: 'LinkedIn' },
+    { 
+      icon: Instagram, 
+      href: 'https://www.instagram.com/paira_art.6?utm_source=qr', 
+      label: 'Instagram' 
+    },
+    { 
+      icon: Facebook, 
+      href: 'https://www.facebook.com/share/1BkzV8SAdF/?mibextid=wwXIfr', 
+      label: 'Facebook' 
+    },
+    { 
+      icon: Linkedin, 
+      href: 'https://www.linkedin.com/in/peter-muwulya-a33041392?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app', 
+      label: 'LinkedIn' 
+    },
+    { 
+      icon: Twitter, 
+      href: 'https://x.com/peter_paira?s=11', 
+      label: 'X (Twitter)' 
+    },
+    { 
+      icon: Youtube, 
+      href: 'https://youtube.com/@pairaart.6?si=B-9AiU6MquCtsx9V', 
+      label: 'YouTube' 
+    },
+    { 
+      icon: 'tiktok', 
+      href: 'https://www.tiktok.com/@paira.art.6?_r=1&_t=ZM-926inGseuBY', 
+      label: 'TikTok' 
+    },
   ];
 
   return (
@@ -112,7 +146,7 @@ export default function ContactPage() {
                 <p className="luxury-text mb-4">Inquiries</p>
                 <h2 className="section-title mb-8">Let's Talk</h2>
                 <p className="text-charcoal-600 leading-relaxed text-lg mb-8">
-                  I respond within an hour to my emails but even quicker on Whatsapp, 
+                  I respond within an hour to my emails but even quicker on WhatsApp, 
                   if that's your preferred method please let me know!
                 </p>
               </div>
@@ -144,7 +178,7 @@ export default function ContactPage() {
               {/* Social Links */}
               <div>
                 <p className="luxury-text mb-4">Follow Me</p>
-                <div className="flex gap-4">
+                <div className="flex flex-wrap gap-4">
                   {socialLinks.map((social) => {
                     const Icon = social.icon;
                     return (
@@ -155,8 +189,19 @@ export default function ContactPage() {
                         rel="noopener noreferrer"
                         className="w-12 h-12 rounded-full border-2 border-charcoal-200 flex items-center justify-center hover:bg-pumpkin-500 hover:border-pumpkin-500 transition-all duration-300 group"
                         aria-label={social.label}
+                        title={social.label}
                       >
-                        <Icon className="w-5 h-5 text-charcoal-600 group-hover:text-white transition-colors duration-300" />
+                        {social.icon === 'tiktok' ? (
+                          <svg 
+                            className="w-5 h-5 text-charcoal-600 group-hover:text-white transition-colors duration-300" 
+                            viewBox="0 0 24 24" 
+                            fill="currentColor"
+                          >
+                            <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                          </svg>
+                        ) : (
+                          <Icon className="w-5 h-5 text-charcoal-600 group-hover:text-white transition-colors duration-300" />
+                        )}
                       </a>
                     );
                   })}
@@ -211,7 +256,7 @@ export default function ContactPage() {
                     <option value="email">Email</option>
                     <option value="call">Call</option>
                     <option value="text">Text</option>
-                    <option value="whatsapp">Whatsapp</option>
+                    <option value="whatsapp">WhatsApp</option>
                   </select>
                 </div>
 
