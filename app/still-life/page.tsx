@@ -1,34 +1,53 @@
-// FILE 2: app/still-life/page.tsx
-// ==============================================
-
+// ========================================
+// FILE 1: app/still-life/page.tsx
+// ========================================
 import CategoryHero from '@/components/gallery/CategoryHero';
 import GalleryGrid from '@/components/gallery/GalleryGrid';
+import { getPageBanner, getGalleryImages, urlFor } from '@/lib/sanity';
 
 export const metadata = {
   title: 'Still Life Photography | Paira Art.6',
   description: 'Beauty in simplicity - still life photography with artistic vision',
 };
 
-export default function StillLifePage() {
-  const demoImages = [
-    { _id: '1', url: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80', alt: 'Still Life 1' },
-    { _id: '2', url: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80', alt: 'Still Life 2' },
-    { _id: '3', url: 'https://images.unsplash.com/photo-1560393464-5c69a73c5770?w=800&q=80', alt: 'Still Life 3' },
-    { _id: '4', url: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80', alt: 'Still Life 4' },
-    { _id: '5', url: 'https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=800&q=80', alt: 'Still Life 5' },
-    { _id: '6', url: 'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=800&q=80', alt: 'Still Life 6' },
-  ];
+export const revalidate = 60;
+
+export default async function StillLifePage() {
+  const banner = await getPageBanner('stillLife');
+  const sanityImages = await getGalleryImages('stillLife');
+  
+  const images = sanityImages.map((img) => ({
+    _id: img._id,
+    url: urlFor(img.image).width(800).quality(80).url(),
+    alt: img.title || 'Still life photography',
+    title: img.title,
+    description: img.description,
+  }));
+
+  const bannerTitle = banner?.title || 'Still Life';
+  const bannerDescription = banner?.description || 'Finding beauty in simplicity through artistic composition';
+  const bannerImage = banner?.backgroundImage 
+    ? urlFor(banner.backgroundImage).width(1920).quality(80).url()
+    : 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1920&q=80';
 
   return (
     <main>
       <CategoryHero
-        title="Still Life"
-        description="Finding beauty in simplicity through artistic composition"
-        backgroundImage="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1920&q=80"
+        title={bannerTitle}
+        description={bannerDescription}
+        backgroundImage={bannerImage}
       />
       <section className="py-20 bg-white">
         <div className="container-luxury">
-          <GalleryGrid images={demoImages} />
+          {images.length > 0 ? (
+            <GalleryGrid images={images} />
+          ) : (
+            <div className="text-center py-20">
+              <p className="text-gray-500 text-lg">
+                No images available yet. Add images in Sanity Studio.
+              </p>
+            </div>
+          )}
         </div>
       </section>
     </main>
