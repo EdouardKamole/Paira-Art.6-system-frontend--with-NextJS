@@ -4,141 +4,176 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import CategoryHero from '@/components/gallery/CategoryHero';
 import { Play, X } from 'lucide-react';
+import { client, urlFor } from '@/lib/sanity';
+
+interface Video {
+  _id: string;
+  title: string;
+  description?: string;
+  thumbnail: any;
+  videoType: 'youtube' | 'vimeo' | 'file';
+  youtubeUrl?: string;
+  vimeoUrl?: string;
+  videoFile?: any;
+  duration?: string;
+  isShowreel: boolean;
+  order: number;
+}
+
+interface PageBanner {
+  title: string;
+  description: string;
+  backgroundImage: any;
+}
 
 export default function FilmPage() {
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
+  const [videos, setVideos] = useState<Video[]>([]);
+  const [showreel, setShowreel] = useState<Video | null>(null);
+  const [banner, setBanner] = useState<PageBanner | null>(null);
 
-  // Demo videos - Replace with Sanity CMS data
-  const videos = [
-    {
-      _id: '1',
-      title: 'Fashion Film 2024',
-      thumbnail: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=800&q=80',
-      videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', // Replace with actual video
-      description: 'A cinematic journey through modern fashion',
-      duration: '2:45',
-    },
-    {
-      _id: '2',
-      title: 'Kampala Stories',
-      thumbnail: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800&q=80',
-      videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-      description: 'Documentary capturing life in Kampala',
-      duration: '5:20',
-    },
-    {
-      _id: '3',
-      title: 'Brand Commercial',
-      thumbnail: 'https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=800&q=80',
-      videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-      description: 'High-end brand commercial production',
-      duration: '1:30',
-    },
-    {
-      _id: '4',
-      title: 'Portrait Series',
-      thumbnail: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=800&q=80',
-      videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-      description: 'Moving portraits in motion',
-      duration: '3:15',
-    },
-    {
-      _id: '5',
-      title: 'Event Highlights',
-      thumbnail: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&q=80',
-      videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-      description: 'Fashion event coverage and highlights',
-      duration: '4:00',
-    },
-    {
-      _id: '6',
-      title: 'Behind the Scenes',
-      thumbnail: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800&q=80',
-      videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-      description: 'A look behind the camera',
-      duration: '2:30',
-    },
-  ];
+  useEffect(() => {
+    async function fetchData() {
+      // Fetch banner
+      const bannerQuery = `*[_type == "pageBanner" && page == "film" && isActive == true][0]{
+        title, description, backgroundImage
+      }`;
+      const bannerData = await client.fetch(bannerQuery);
+      setBanner(bannerData);
+
+      // Fetch videos
+      const videosQuery = `*[_type == "film"] | order(order asc){
+        _id, title, description, thumbnail, videoType, 
+        youtubeUrl, vimeoUrl, videoFile, duration, isShowreel, order
+      }`;
+      const videosData = await client.fetch(videosQuery);
+      
+      const showreelVideo = videosData.find((v: Video) => v.isShowreel);
+      const regularVideos = videosData.filter((v: Video) => !v.isShowreel);
+      
+      setShowreel(showreelVideo);
+      setVideos(regularVideos);
+    }
+    fetchData();
+  }, []);
+
+  const getEmbedUrl = (video: Video): string => {
+    if (video.videoType === 'youtube' && video.youtubeUrl) {
+      const videoId = video.youtubeUrl.split('v=')[1]?.split('&')[0] || 
+                      video.youtubeUrl.split('/').pop();
+      return `https://www.youtube.com/embed/${videoId}`;
+    }
+    if (video.videoType === 'vimeo' && video.vimeoUrl) {
+      const videoId = video.vimeoUrl.split('/').pop();
+      return `https://player.vimeo.com/video/${videoId}`;
+    }
+    if (video.videoType === 'file' && video.videoFile) {
+      return video.videoFile.asset.url;
+    }
+    return '';
+  };
+
+  const bannerTitle = banner?.title || 'Film';
+  const bannerDescription = banner?.description || 'Visual narratives that move - cinematography and video production';
+  const bannerImage = banner?.backgroundImage 
+    ? urlFor(banner.backgroundImage).width(1920).quality(80).url()
+    : 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=1920&q=80';
 
   return (
     <main>
       <CategoryHero
-        title="Film"
-        description="Visual narratives that move - cinematography and video production"
-        backgroundImage="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=1920&q=80"
+        title={bannerTitle}
+        description={bannerDescription}
+        backgroundImage={bannerImage}
       />
 
       <section className="py-20 bg-white">
         <div className="container-luxury">
           
           {/* Showreel Section */}
-          <div className="mb-20">
-            <div className="text-center mb-12">
-              <p className="luxury-text mb-4">Featured Work</p>
-              <h2 className="section-title mb-6">Showreel 2024</h2>
-              <p className="subtitle max-w-2xl mx-auto">
-                A collection of my best cinematography work
-              </p>
+          {showreel && (
+            <div className="mb-20">
+              <div className="text-center mb-12">
+                <p className="luxury-text mb-4">Featured Work</p>
+                <h2 className="section-title mb-6">Showreel 2024</h2>
+                <p className="subtitle max-w-2xl mx-auto">
+                  {showreel.description || 'A collection of my best cinematography work'}
+                </p>
+              </div>
+              
+              <div className="max-w-5xl mx-auto aspect-video bg-charcoal-900 rounded-lg overflow-hidden">
+                <iframe
+                  className="w-full h-full"
+                  src={getEmbedUrl(showreel)}
+                  title="Showreel"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
             </div>
-            
-            <div className="max-w-5xl mx-auto aspect-video bg-charcoal-900 rounded-lg overflow-hidden">
-              <iframe
-                className="w-full h-full"
-                src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-                title="Showreel"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-          </div>
+          )}
 
           {/* Video Grid */}
-          <div>
-            <h3 className="font-serif text-3xl mb-12">All Projects</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {videos.map((video, index) => (
-                <div
-                  key={video._id}
-                  className="group cursor-pointer"
-                  onClick={() => setSelectedVideo(video.videoUrl)}
-                  style={{
-                    animation: `slide-up 0.6s ease-out ${index * 0.1}s backwards`,
-                  }}
-                >
-                  {/* Video Thumbnail */}
-                  <div className="relative aspect-video rounded-lg overflow-hidden mb-4">
-                    <div
-                      className="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                      style={{ backgroundImage: `url(${video.thumbnail})` }}
-                    />
-                    
-                    {/* Overlay */}
-                    <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-all duration-500 flex items-center justify-center">
-                      <div className="w-16 h-16 rounded-full bg-pumpkin-500 flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300">
-                        <Play className="w-8 h-8 text-white ml-1" fill="white" />
+          {videos.length > 0 ? (
+            <div>
+              <h3 className="font-serif text-3xl mb-12">All Projects</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {videos.map((video, index) => (
+                  <div
+                    key={video._id}
+                    className="group cursor-pointer"
+                    onClick={() => setSelectedVideo(getEmbedUrl(video))}
+                    style={{
+                      animation: `slide-up 0.6s ease-out ${index * 0.1}s backwards`,
+                    }}
+                  >
+                    {/* Video Thumbnail */}
+                    <div className="relative aspect-video rounded-lg overflow-hidden mb-4">
+                      <div
+                        className="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                        style={{ 
+                          backgroundImage: `url(${urlFor(video.thumbnail).width(800).quality(80).url()})` 
+                        }}
+                      />
+                      
+                      {/* Overlay */}
+                      <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-all duration-500 flex items-center justify-center">
+                        <div className="w-16 h-16 rounded-full bg-pumpkin-500 flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300">
+                          <Play className="w-8 h-8 text-white ml-1" fill="white" />
+                        </div>
                       </div>
+
+                      {/* Duration Badge */}
+                      {video.duration && (
+                        <div className="absolute bottom-3 right-3 bg-black/70 backdrop-blur-sm px-3 py-1 rounded-full">
+                          <p className="text-white text-xs font-light">{video.duration}</p>
+                        </div>
+                      )}
                     </div>
 
-                    {/* Duration Badge */}
-                    <div className="absolute bottom-3 right-3 bg-black/70 backdrop-blur-sm px-3 py-1 rounded-full">
-                      <p className="text-white text-xs font-light">{video.duration}</p>
-                    </div>
+                    {/* Video Info */}
+                    <h4 className="font-serif text-xl mb-2 group-hover:text-pumpkin-500 transition-colors duration-300">
+                      {video.title}
+                    </h4>
+                    {video.description && (
+                      <p className="text-charcoal-600 text-sm leading-relaxed">
+                        {video.description}
+                      </p>
+                    )}
                   </div>
-
-                  {/* Video Info */}
-                  <h4 className="font-serif text-xl mb-2 group-hover:text-pumpkin-500 transition-colors duration-300">
-                    {video.title}
-                  </h4>
-                  <p className="text-charcoal-600 text-sm leading-relaxed">
-                    {video.description}
-                  </p>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="text-center py-20">
+              <p className="text-gray-500 text-lg">
+                No videos available yet. Add videos in Sanity Studio.
+              </p>
+            </div>
+          )}
         </div>
       </section>
 
