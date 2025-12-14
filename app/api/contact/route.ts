@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
       await resend.emails.send({
         from: 'Paira Art <onboarding@resend.dev>',
         to: contactInfo, // Client's email
-        replyTo: 'eddy.programmer@gmail.com',
+        replyTo: 'eddy.progammer@gmail.com',
         subject: 'Thank you for contacting Paira Art! 📸',
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -97,7 +97,7 @@ export async function POST(request: NextRequest) {
     try {
       await resend.emails.send({
         from: 'Paira Art Notifications <onboarding@resend.dev>',
-        to: 'eddy.programmer@gmail.com',
+        to: 'eddy.progammer@gmail.com',
         subject: `🔔 New Contact Form Submission - ${name}`,
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
