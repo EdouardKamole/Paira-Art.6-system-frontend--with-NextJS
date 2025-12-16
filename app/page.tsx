@@ -113,27 +113,36 @@ export default function HomePage() {
           </div>
         ))}
 
-        {/* Content Over Slider */}
-        <div className="absolute inset-0 flex items-center justify-center z-10">
-          <div className="text-center text-white px-6">
-            <p className="luxury-text text-white/90 mb-6 animate-fade-in">
-              Visual Storytelling from Kampala
-            </p>
-            <h1 className="hero-title mb-6 animate-slide-up">
-              Paira Art.6
-            </h1>
-            <p className="subtitle text-white/90 mb-12 max-w-2xl mx-auto animate-fade-in-slow">
-              {heroImages[currentSlide].category} • {heroImages[currentSlide].title}
-            </p>
-            <Link
-              href="/about"
-              className="btn-primary inline-flex items-center gap-2 animate-fade-in-slow"
-            >
-              Discover My Work
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-        </div>
+       {/* Content Over Slider */}
+<div className="absolute inset-0 flex items-center justify-center z-10">
+  <div className="text-center px-6">
+
+    {/* FORCE PURE WHITE */}
+    <p className="luxury-text !text-white mb-6 animate-fade-in">
+      Visual Storyteller From Uganda
+    </p>
+
+    <h1 className="hero-title mb-6 animate-slide-up !text-pumpkin-500">
+  Paira Art.6
+</h1>
+
+
+    {/* FORCE PURE WHITE */}
+    <p className="subtitle !text-white mb-12 max-w-2xl mx-auto animate-fade-in-slow">
+      {heroImages[currentSlide].category} • {heroImages[currentSlide].title}
+    </p>
+
+    <Link
+      href="/about"
+      className="btn-primary inline-flex items-center gap-2 animate-fade-in-slow"
+    >
+      Discover My Work
+      <ArrowRight className="w-4 h-4" />
+    </Link>
+
+  </div>
+</div>
+
 
         {/* Navigation Arrows */}
         <button
@@ -168,55 +177,66 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Categories Grid */}
-      <section className="py-32 bg-cream-50">
-        <div className="container-luxury">
-          <div className="text-center mb-20">
-            <p className="luxury-text mb-4">Explore My Work</p>
-            <h2 className="section-title mb-6">Photography Categories</h2>
-            <p className="subtitle max-w-2xl mx-auto">
-              From fashion to film, each frame tells a story
-            </p>
-          </div>
+     {/* Categories Grid */}
+<section className="py-32 bg-cream-50">
+  <div className="container-luxury">
+    <div className="text-center mb-20">
+      <p className="luxury-text mb-4">Explore My Work</p>
+      <h2 className="section-title mb-6">Photography Categories</h2>
+      <p className="subtitle max-w-2xl mx-auto">
+        From fashion to film, each frame tells a story
+      </p>
+    </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {categories.map((category, index) => (
-              <Link
-                key={category.href}
-                href={category.href}
-                className="card-luxury group overflow-hidden"
-                style={{
-                  animation: `slide-up 0.6s ease-out ${index * 0.1}s backwards`,
-                }}
-              >
-                <div className="relative aspect-[4/5] overflow-hidden">
-                  <div
-                    className="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                    style={{ backgroundImage: `url(${category.image})` }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
-                  
-                  {/* Category Info */}
-                  <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
-                    <p className="luxury-text text-white/80 mb-2">
-                      {category.description}
-                    </p>
-                    <h3 className="font-serif text-3xl mb-3 transform group-hover:translate-x-2 transition-transform duration-300">
-                      {category.title}
-                    </h3>
-                    <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <span className="text-sm">View Gallery</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {categories.map((category, index) => (
+        <Link
+          key={category.href}
+          href={category.href}
+          className="card-luxury group overflow-hidden"
+          style={{
+            animation: `slide-up 0.6s ease-out ${index * 0.1}s backwards`,
+          }}
+        >
+          <div className="relative aspect-[4/5] overflow-hidden">
+            {/* Background Image */}
+            <div
+              className="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+              style={{ backgroundImage: `url(${category.image})` }}
+            />
 
-      {/* About Preview Section */}
+            {/* Dark Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
+
+            {/* Category Info */}
+            <div className="absolute bottom-0 left-0 right-0 p-8">
+              {/* Description — WHITE */}
+              <p className="luxury-text text-white mb-2">
+                {category.description}
+              </p>
+
+              {/* Title — WHITE */}
+              <h3 className="font-serif text-3xl mb-3 text-white transform group-hover:translate-x-2 transition-transform duration-300">
+                {category.title}
+              </h3>
+
+              {/* CTA — WHITE */}
+              <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <span className="text-sm text-white">
+                  DISCOVER MY WORK
+                </span>
+                <ArrowRight className="w-4 h-4 text-white" />
+              </div>
+            </div>
+          </div>
+        </Link>
+      ))}
+    </div>
+  </div>
+</section>
+
+{/* About Preview Section */}
+
       <section className="py-32 bg-white">
         <div className="container-luxury">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
